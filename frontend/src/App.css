@@ -182,3 +182,222 @@
     border-right-color: var(--border);
   }
 }
+/* =========================================
+   AUTOMATIC IRRIGATION
+========================================= */
+
+.irrigation-heading {
+  margin-top: 42px;
+}
+
+.auto-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.irrigation-panel {
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 42px;
+  border: 1px solid #e5e7eb;
+  transition: 0.3s ease;
+}
+
+.irrigation-active {
+  background: linear-gradient(
+    135deg,
+    #ecfdf5,
+    #f0fdf4
+  );
+  border-color: #86efac;
+}
+
+.irrigation-idle {
+  background: #ffffff;
+}
+
+.irrigation-main {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.pump-circle {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  flex-shrink: 0;
+}
+
+.pump-on {
+  background: #dcfce7;
+  border: 5px solid #22c55e;
+  box-shadow: 0 0 0 8px #f0fdf4;
+  animation: pumpPulse 1.8s infinite;
+}
+
+.pump-off {
+  background: #f3f4f6;
+  border: 5px solid #d1d5db;
+}
+
+@keyframes pumpPulse {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(34, 197, 94, 0.35);
+  }
+
+  70% {
+    box-shadow:
+      0 0 0 14px rgba(34, 197, 94, 0);
+  }
+
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+.irrigation-label {
+  display: block;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.irrigation-main-info h3 {
+  margin: 0;
+  font-size: 30px;
+  color: #111827;
+}
+
+.irrigation-main-info p {
+  margin: 7px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.hardware-status {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.hardware-item {
+  min-width: 150px;
+  padding: 15px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hardware-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+}
+
+.hardware-item span {
+  display: block;
+  color: #9ca3af;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  margin-bottom: 3px;
+}
+
+.hardware-item strong {
+  font-size: 14px;
+}
+
+.status-on {
+  color: #16a34a;
+}
+
+.status-off {
+  color: #6b7280;
+}
+
+.status-auto {
+  color: #2563eb;
+}
+
+
+/* =========================================
+   MOBILE IRRIGATION
+========================================= */
+
+@media (max-width: 900px) {
+
+  .irrigation-panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hardware-status {
+    width: 100%;
+  }
+
+  .hardware-item {
+    flex: 1;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .irrigation-panel {
+    padding: 20px;
+  }
+
+  .irrigation-main {
+    align-items: flex-start;
+  }
+
+  .pump-circle {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+  }
+
+  .irrigation-main-info h3 {
+    font-size: 22px;
+  }
+
+  .hardware-status {
+    flex-direction: column;
+  }
+
+  .hardware-item {
+    width: 100%;
+  }
+
+}

@@ -5,17 +5,10 @@ from pydantic import BaseModel
 
 BASE = Path(__file__).resolve().parent
 
-rain_model = joblib.load(
-    BASE / "models" / "rain_model.pkl"
-)
+rain_model = joblib.load(BASE / "models" / "rain_model.pkl")
+moisture_model = joblib.load(BASE / "models" / "moisture_model.pkl")
 
-moisture_model = joblib.load(
-    BASE / "models" / "moisture_model.pkl"
-)
-
-app = FastAPI(
-    title="Smart Soil Prediction API"
-)
+app = FastAPI(title="Smart Irrigation ML API")
 
 
 class SensorInput(BaseModel):
@@ -28,7 +21,7 @@ class SensorInput(BaseModel):
 def root():
     return {
         "ok": True,
-        "message": "ML prediction API is running"
+        "message": "Smart Irrigation ML API is running"
     }
 
 
@@ -40,6 +33,10 @@ def predict(data: SensorInput):
         data.temperature,
         data.humidity
     ]]
+
+    # -----------------------------
+    # ML predictions
+    # -----------------------------
 
     rain_probability = float(
         rain_model.predict_proba(X)[0][1] * 100
@@ -54,26 +51,54 @@ def predict(data: SensorInput):
         min(100, future_moisture)
     )
 
-    if data.soil_moisture < 30 and rain_probability < 40:
+    # -----------------------------
+    # Smart irrigation logic
+    # -----------------------------
+
+    if (
+        data.soil_moisture < 30
+        and rain_probability < 40
+        and future_moisture < 60
+    ):
+        relay_command = "ON"
+        pump_status = "IRRIGATION ON"
         recommendation = "Irrigation required"
+        reason = "Soil is dry and rain is unlikely"
 
-    elif data.soil_moisture < 30 and rain_probability >= 40:
+    elif rain_probability >= 40:
+        relay_command = "OFF"
+        pump_status = "PUMP OFF"
         recommendation = "Wait and monitor rainfall"
+        reason = "Rain probability is high"
 
-    elif data.soil_moisture >= 60:
+    elif future_moisture >= 60:
+        relay_command = "OFF"
+        pump_status = "PUMP OFF"
         recommendation = "Irrigation not required"
+        reason = "Predicted soil moisture is sufficient"
 
     else:
+        relay_command = "OFF"
+        pump_status = "PUMP OFF"
         recommendation = "Monitor soil moisture"
+        reason = "Irrigation conditions are not satisfied"
 
     return {
         "rain_probability": round(
-            rain_probability, 2
+            rain_probability,
+            2
         ),
 
         "predicted_soil_moisture_6h": round(
-            future_moisture, 2
+            future_moisture,
+            2
         ),
 
-        "recommendation": recommendation
+        "recommendation": recommendation,
+
+        "relay_command": relay_command,
+
+        "pump_status": pump_status,
+
+        "reason": reason
     }
